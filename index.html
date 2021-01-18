@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>aski</title>
+</head>
+
+<body>
+    <div class="noCache">
+        <!-- function -->
+        <script>
+            let wedcam = true;
+            function creeImg(src, wedcame) {
+                document.querySelector('#resulta').innerHTML = `<img id="img" onload="draw(${wedcame});" src = "${src}">`;
+            }
+        </script>
+
+        <form id="reglage" action="index.html" method="get">
+
+            <ul>
+
+                <li class="police">
+                    <label for="fontSize">taille de la police</label>
+                    <input type="number" name="fontSize" class="fontSize" value="10" min="2">
+                </li>
+
+                <li class="srcImg">
+                    <input type="file" accept="image/*" name="fileImg" id="fileImg">
+                    <script>
+
+                        const fileImg = document.querySelector("#fileImg");
+                        fileImg.addEventListener("change", function () {
+                            const img = this.files[0];
+                            if (img) {
+                                wedcam = false;
+
+                                const fillMan = new FileReader();
+                                fillMan.readAsDataURL(img);
+
+                                fillMan.addEventListener("load", function () {
+                                    creeImg(this.result, wedcam);
+                                });
+
+                            }
+                        });
+                    </script>
+                    <br>
+
+                    <label for="webcam">
+                        <input type="checkbox" name="webcam" id="webcam">
+                        utiliser la webcam
+                    </label>
+                </li>
+
+
+                <li class="textUsed">
+                    <label for="textUsed">
+                        rentrez un text a la basse de l'effet ⚠️ ne pas mettre d'espace.
+                    </label>
+                    <input type="text" name="textUsed" id="textUsed">
+                </li>
+            </ul>
+        </form>
+
+        <!-- empeche le redemarage de la page par le from -->
+        <script>
+            document.querySelector("#reglage").addEventListener("submit", (e) => {
+                e.preventDefault();
+            });
+        </script>
+
+
+        <!-- affichage de l'img et du text simuler -->
+        <div class="simulation">
+            <canvas id="canvas"></canvas>
+
+            <p id="p"></p>
+        </div>
+        <script src="script/onLoad.js" defer>
+
+        </script>
+
+        <canvas id="canvasLaitre"></canvas>
+
+        <script src="script/annaliseTailleDesCaractere.js" defer>
+        </script>
+
+    </div>
+    <div class="cacheur"></div>
+
+    <div id="camera" class="cache" style="width: 320px; height: 240px;"></div>
+    <div id="resulta" class="cache"></div>
+    <script src="script/app.js"></script>
+
+    <!--variable global-->
+    <script src="script/wedcam.js"></script>
+    <script>
+        Webcam.attach('#camera');
+
+        function take_snapshot() {
+            Webcam.snap((src) => {
+                creeImg(src, wedcam);
+            });
+
+        }
+        setTimeout(take_snapshot, 5000);
+    </script>
+
+
+
+</body>
+
+</html>
